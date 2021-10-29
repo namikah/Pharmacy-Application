@@ -216,6 +216,32 @@ namespace Aptek
                 goto InputSelectPharmacy;
             }
 
+            MenuInputDrugId(pharmacyList,drugList, out Drug selectedDrug);
+
+            MenuInputDrugQuantity(pharmacyList, drugList, selectedDrug, out int quantity);
+
+            MenuPayMoney(selectedDrug,quantity);
+        }
+
+        public static void MenuInputDrugQuantity(List<Pharmacy> pharmacyList, List<Drug> drugList, Drug selectedDrug, out int quantity)
+        {
+        InputDrugQuantity:
+            Helper.Print("How much, you want to buy:", ConsoleColor.White);
+            if (!int.TryParse(Console.ReadLine(), out quantity))
+            {
+                Helper.IncorrectMessage();
+                MenuInputDrugId(pharmacyList, drugList, out selectedDrug);
+            }
+
+            if (!CheckDrugQuantity(selectedDrug, quantity))
+            {
+                Helper.PrintLine($"Sorry, but we have only {selectedDrug.Quantity} pieces.", ConsoleColor.Red);
+                goto InputDrugQuantity;
+            }
+        }
+
+        public static void MenuInputDrugId(List<Pharmacy> pharmacyList, List<Drug> drugList, out Drug selectedDrug)
+        {
         inputDrugId:
             ShowAllDrugs(pharmacyList);
             Helper.Print("Select drug:", ConsoleColor.White);
@@ -230,28 +256,12 @@ namespace Aptek
                 Helper.IdNotFoundMessage(id);
                 goto inputDrugId;
             }
-            var selectedDrug = drugList.Find(x => x.Id == id);
+            selectedDrug = drugList.Find(x => x.Id == id);
             if (selectedDrug.Quantity == 0)
             {
                 Helper.PrintLine($"Sorry, but we have not [{selectedDrug.Name}]", ConsoleColor.Red);
                 return;
             }
-
-        InputDrugQuantity:
-            Helper.Print("How much, you want to buy:", ConsoleColor.White);
-            if (!int.TryParse(Console.ReadLine(), out int quantity))
-            {
-                Helper.IncorrectMessage();
-                goto inputDrugId;
-            }
-
-            if (!CheckDrugQuantity(selectedDrug, quantity))
-            {
-                Helper.PrintLine($"Sorry, but we have only {selectedDrug.Quantity} pieces.", ConsoleColor.Red);
-                goto InputDrugQuantity;
-            }
-
-            MenuPayMoney(selectedDrug,quantity);
         }
 
         public static void MenuPayMoney(Drug selectedDrug, int quantity)
@@ -265,27 +275,25 @@ namespace Aptek
             }
             if (money < selectedDrug.Price * quantity)
             {
-                Helper.PrintLine($"Sorry, you must pay {selectedDrug.Price * quantity}AZN ({selectedDrug.Price} * {quantity} = {selectedDrug.Price * quantity})", ConsoleColor.Red);
+                Helper.PrintLine($"Sorry, you must to pay {selectedDrug.Price * quantity}AZN ({selectedDrug.Price} * {quantity} = {selectedDrug.Price * quantity})", ConsoleColor.Red);
                 goto InputMoney;
             }
             else if (money > selectedDrug.Price * quantity)
             {
                 if (!selectedDrug.DecrementQuantity(quantity))
                 {
-                    Helper.PrintLine($"Sorry, ", ConsoleColor.Red);
                     goto InputMoney;
                 }
-                Helper.PrintLine($"you have paid more than [{selectedDrug.Price * quantity}]. please take [{money - selectedDrug.Price * quantity}AZN]", ConsoleColor.Red);
+                Helper.PrintLine($"You have paid more than [{selectedDrug.Price * quantity}]. please take [{money - selectedDrug.Price * quantity}AZN] Thank you", ConsoleColor.Red);
             }
             else if (money == selectedDrug.Price * quantity)
             {
                 if (!selectedDrug.DecrementQuantity(quantity))
                 {
-                    Helper.PrintLine($"Sorry, ", ConsoleColor.Red);
                     goto InputMoney;
                 }
+                Helper.PrintLine($"Thank you, please take drugs", ConsoleColor.Red);
             }
-            Helper.PrintLine($"Thank you, please take drugs", ConsoleColor.Red);
         }
 
         public static bool CheckDrugQuantity(Drug selectedDrug, int quantity)

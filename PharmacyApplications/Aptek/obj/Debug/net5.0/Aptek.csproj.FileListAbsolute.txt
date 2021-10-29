@@ -37,7 +37,6 @@ C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\bin\Debug\ne
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\bin\Debug\net5.0\Aptek.dll
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\bin\Debug\net5.0\ref\Aptek.dll
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\bin\Debug\net5.0\Aptek.pdb
-C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.csproj.AssemblyReference.cache
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.AssemblyInfoInputs.cache
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.AssemblyInfo.cs
