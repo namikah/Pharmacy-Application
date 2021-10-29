@@ -8,23 +8,19 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\namikah\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Desktop\\Pharmacy\\PharmacyApplications\\Aptek\\Aptek.csproj",
       "projectName": "Aptek",
-      "projectPath": "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj",
-      "packagesPath": "C:\\Users\\namikah\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Pharmacy\\PharmacyApplications\\Aptek\\Aptek.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\OneDrive\\Desktop\\Pharmacy\\PharmacyApplications\\Aptek\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\namikah\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -64,7 +60,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

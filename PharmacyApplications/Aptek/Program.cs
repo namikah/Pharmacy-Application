@@ -12,8 +12,6 @@ namespace Aptek
         {
             List<Pharmacy> pharmacyList = new List<Pharmacy>();
 
-            MainMenuDesign();
-
             MainMenu(pharmacyList);
         }
 
@@ -21,18 +19,7 @@ namespace Aptek
         {
             while (true)
             {
-                Console.Title = "PHARMACY APPLICATION";
-                Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
-                Helper.PrintLine(
-                    $"[1] Create Pharmacy{Environment.NewLine}" +
-                    $"[2] Create Drug{Environment.NewLine}" +
-                    $"[3] Show all drugs{Environment.NewLine}" +
-                    $"[4] Remove drug{Environment.NewLine}" +
-                    $"[5] Remove pharmacy{Environment.NewLine}" +
-                    $"[6] Sale drug{Environment.NewLine}" +
-                    $"[7] Exit", ConsoleColor.Yellow);
-                Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
-                Helper.Print("Select Operation:",ConsoleColor.White);
+                MainMenuDesign();
                 bool isInt = int.TryParse(Console.ReadLine(), out int menu);
                 int operationCount = Enum.GetValues(typeof(Operations)).Length;
                 if (isInt && (menu >= 1 && menu <= operationCount))
@@ -59,14 +46,12 @@ namespace Aptek
 
                         case Operations.RemoveDrug:
                             Console.Clear();
-                            break;
-
-                        case Operations.RemovePharmacy:
-                            Console.Clear();
+                            MenuRemoveDrug(pharmacyList);
                             break;
 
                         case Operations.SaleDrug:
                             Console.Clear();
+                            MenuSaleDrug(pharmacyList);
                             break;
 
                         case Operations.Exit:
@@ -92,38 +77,24 @@ namespace Aptek
 
             if(pharmacyList.Exists(x => x.Name.ToLower() == name.ToLower()))
             {
-                Helper.PrintLine("Pharmacy name already exist", ConsoleColor.Red);
+                Helper.PrintLine($"Pharmacy name [{name}] already exist", ConsoleColor.Red);
                 goto InputPharmacy;
             }
 
             pharmacyList.Add(new Pharmacy(name));
 
-            Helper.PrintLine($"{name} Created successfully", ConsoleColor.Green);
+            Helper.PrintLine($"[{name}] Created successfully", ConsoleColor.Green);
         }
 
         public static void MenuCreateDrug(List<Pharmacy> pharmacyList)
         {
-            if (pharmacyList.Count == 0)
+            if (!Helper.IsEmphtyPharmacy(pharmacyList))
             {
-                Helper.PrintLine("No available pharmacy found", ConsoleColor.Red);
+                Helper.PharmacyEmphtyMessage();
                 MenuCreatePharmacy(pharmacyList);
             }
 
-        selectPharmacy:
-            ShowAllPharmacies(pharmacyList);
-            Helper.Print("Select pharmacy:", ConsoleColor.Yellow);
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Helper.IncorrectMessage();
-                goto selectPharmacy;
-            }
-
-            var selectedPharmacy = pharmacyList.Find(x => x.Id == id);
-            if (selectedPharmacy == null)
-            {
-                Console.WriteLine($"{id} is not found! try input again");
-                goto selectPharmacy;
-            }
+            Pharmacy selectedPharmacy = MenuSelectPharmacy(pharmacyList);
 
             Helper.Print("Enter drug name:", ConsoleColor.White);
             string name = Console.ReadLine();
@@ -133,7 +104,12 @@ namespace Aptek
 
         inputDrugPrice:
             Helper.Print("Enter drug price:", ConsoleColor.White);
-            if(!double.TryParse(Console.ReadLine(), out double price) && price < 0)
+            double price;
+            try 
+            { 
+                price = Convert.ToDouble(Console.ReadLine()); 
+            } 
+            catch
             {
                 Helper.IncorrectMessage();
                 goto inputDrugPrice;
@@ -161,30 +137,200 @@ namespace Aptek
             }
 
             selectedPharmacy.AddDrug(new Drug(name, new DrugType(typeName), count, price, date));
-            Helper.PrintLine($"<{name}> is successfully added to <{selectedPharmacy.Name}>", ConsoleColor.Green);
+            Helper.PrintLine($"[{name}] is successfully added to [{selectedPharmacy.Name}]", ConsoleColor.Green);
+        }
+
+        public static Pharmacy MenuSelectPharmacy(List<Pharmacy> pharmacyList)
+        {
+        selectPharmacy:
+            ShowAllPharmacies(pharmacyList);
+            Helper.Print("Select pharmacy:", ConsoleColor.Yellow);
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Helper.IncorrectMessage();
+                goto selectPharmacy;
+            }
+
+            var selectedPharmacy = pharmacyList.Find(x => x.Id == id);
+            if (selectedPharmacy == null)
+            {
+                Helper.IdNotFoundMessage(id);
+                goto selectPharmacy;
+            }
+
+            return selectedPharmacy;
+        }
+        
+        public static void MenuRemoveDrug(List<Pharmacy> pharmacyList)
+        {
+            if (!Helper.IsEmphtyPharmacy(pharmacyList))
+            {
+                Helper.PharmacyEmphtyMessage();
+                return;
+            }
+
+            InputSelectPharmacy:
+            Pharmacy selectedPharmacy = MenuSelectPharmacy(pharmacyList);
+
+            var drugList = selectedPharmacy.DrugsList();
+            if (drugList.Count == 0)
+            {
+                Helper.PrintLine($"No drug in [{selectedPharmacy.Name}]", ConsoleColor.Red);
+                goto InputSelectPharmacy;
+            }
+
+        inputDrugId:
+            ShowAllDrugs(pharmacyList);
+            Helper.Print("Select drug to remove:", ConsoleColor.White);
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Helper.IncorrectMessage();
+                goto inputDrugId;
+            }
+
+            if (!selectedPharmacy.RemoveDrug(id))
+            {
+                Helper.IdNotFoundMessage(id);
+                goto inputDrugId;
+            }
+
+            //var removedDrugName = selectedPharmacy.DrugsList().Find(x => x.Id == id).Name;
+            //Helper.PrintLine($"[{removedDrugName}] is successfully removed from [{selectedPharmacy.Name}]", ConsoleColor.Green);
+        }
+
+        public static void MenuSaleDrug(List<Pharmacy> pharmacyList)
+        {
+            if (!Helper.IsEmphtyPharmacy(pharmacyList))
+            {
+                Helper.PharmacyEmphtyMessage();
+                return;
+            }
+
+        InputSelectPharmacy:
+            Pharmacy selectedPharmacy = MenuSelectPharmacy(pharmacyList);
+
+            var drugList = selectedPharmacy.DrugsList();
+            if (drugList.Count == 0)
+            {
+                Helper.PrintLine($"No drug in [{selectedPharmacy.Name}]", ConsoleColor.Red);
+                goto InputSelectPharmacy;
+            }
+
+        inputDrugId:
+            ShowAllDrugs(pharmacyList);
+            Helper.Print("Select drug:", ConsoleColor.White);
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Helper.IncorrectMessage();
+                goto inputDrugId;
+            }
+
+            if (!drugList.Exists(x => x.Id == id))
+            {
+                Helper.IdNotFoundMessage(id);
+                goto inputDrugId;
+            }
+            var selectedDrug = drugList.Find(x => x.Id == id);
+            if (selectedDrug.Quantity == 0)
+            {
+                Helper.PrintLine($"Sorry, but we have not [{selectedDrug.Name}]", ConsoleColor.Red);
+                return;
+            }
+
+        InputDrugQuantity:
+            Helper.Print("How much, you want to buy:", ConsoleColor.White);
+            if (!int.TryParse(Console.ReadLine(), out int quantity))
+            {
+                Helper.IncorrectMessage();
+                goto inputDrugId;
+            }
+
+            if (!CheckDrugQuantity(selectedDrug, quantity))
+            {
+                Helper.PrintLine($"Sorry, but we have only {selectedDrug.Quantity} pieces.", ConsoleColor.Red);
+                goto InputDrugQuantity;
+            }
+
+            MenuPayMoney(selectedDrug,quantity);
+        }
+
+        public static void MenuPayMoney(Drug selectedDrug, int quantity)
+        {
+        InputMoney:
+            Helper.PrintLine($"Please pay {selectedDrug.Price * quantity}AZN ({selectedDrug.Price} * {quantity} = {selectedDrug.Price * quantity})", ConsoleColor.White);
+            if (!double.TryParse(Console.ReadLine(), out double money))
+            {
+                Helper.IncorrectMessage();
+                goto InputMoney;
+            }
+            if (money < selectedDrug.Price * quantity)
+            {
+                Helper.PrintLine($"Sorry, you must pay {selectedDrug.Price * quantity}AZN ({selectedDrug.Price} * {quantity} = {selectedDrug.Price * quantity})", ConsoleColor.Red);
+                goto InputMoney;
+            }
+            else if (money > selectedDrug.Price * quantity)
+            {
+                if (!selectedDrug.DecrementQuantity(quantity))
+                {
+                    Helper.PrintLine($"Sorry, ", ConsoleColor.Red);
+                    goto InputMoney;
+                }
+                Helper.PrintLine($"you have paid more than [{selectedDrug.Price * quantity}]. please take [{money - selectedDrug.Price * quantity}AZN]", ConsoleColor.Red);
+            }
+            else if (money == selectedDrug.Price * quantity)
+            {
+                if (!selectedDrug.DecrementQuantity(quantity))
+                {
+                    Helper.PrintLine($"Sorry, ", ConsoleColor.Red);
+                    goto InputMoney;
+                }
+            }
+            Helper.PrintLine($"Thank you, please take drugs", ConsoleColor.Red);
+        }
+
+        public static bool CheckDrugQuantity(Drug selectedDrug, int quantity)
+        {
+            if(selectedDrug.Quantity >= quantity)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool CheckDrugPrice(Drug selectedDrug, double money)
+        {
+            if (selectedDrug.Price == money)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public static void ShowAllDrugs(List<Pharmacy> pharmacyList)
         {
             if(pharmacyList.Count == 0)
             {
-               Helper.PrintLine("Pharmacy is emphty",ConsoleColor.Red);
+                Helper.PharmacyEmphtyMessage();
                 return;
             }
 
             foreach (var p in pharmacyList)
             {
-                if (p.ShowDrugs().Count == 0)
+                if (p.DrugsList().Count == 0)
+                {
                     continue;
+                }
 
                 Helper.PrintLine("".PadLeft(Console.WindowWidth, '-'), ConsoleColor.DarkMagenta);
                 Helper.PrintLine(p, ConsoleColor.Yellow);
-                foreach (var d in p.ShowDrugs())
+
+                foreach (var d in p.DrugsList())
                 {
                     Helper.PrintLine(d, ConsoleColor.DarkYellow);
                 }
             }
         }
+
         public static void ShowAllPharmacies(List<Pharmacy> pharmacyList)
         {
             foreach (var item in pharmacyList)
@@ -195,22 +341,17 @@ namespace Aptek
 
         public static void MainMenuDesign()
         {
+            Console.Title = "PHARMACY APPLICATION";
             Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
-            Helper.PrintLine(":: P H A R M A C Y   A P P L I C A T I O N ::".PadLeft(Console.WindowWidth/2 + 20), ConsoleColor.Yellow);
-            Helper.PrintLine("".PadLeft(Console.WindowWidth, '-'), ConsoleColor.DarkYellow);
+            Helper.PrintLine(
+                $"[1] Create Pharmacy{Environment.NewLine}" +
+                $"[2] Create Drug{Environment.NewLine}" +
+                $"[3] Show all drugs{Environment.NewLine}" +
+                $"[4] Remove drug{Environment.NewLine}" +
+                $"[5] Sale drug{Environment.NewLine}" +
+                $"[6] Exit", ConsoleColor.Yellow);
             Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
-            Console.WriteLine(":: MAIN MENU ::".PadLeft(Console.WindowWidth / 2 + 5), ConsoleColor.Yellow);
-            Helper.PrintLine("".PadLeft(Console.WindowWidth, '-'), ConsoleColor.DarkYellow);
-            //Console.WriteLine();
-            //Console.WriteLine(" >> AddMedicine    [1]");
-            //Console.WriteLine(" >> EditMedicine   [2]");
-            //Console.WriteLine(" >> UpdateAmount   [3]");
-            //Console.WriteLine(" >> DeleteMedicine [4]");
-            //Console.WriteLine(" >> ShowMedicines  [5]");
-            //Console.WriteLine(" >> SellMedicine   [6]");
-            //Console.WriteLine(" >> Help           [7]");
-            //Console.WriteLine(" >> Exit           [8]");
-            Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
+            Helper.Print("Select Operation:", ConsoleColor.White);
         }
     }
 }

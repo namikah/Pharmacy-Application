@@ -9,7 +9,7 @@ namespace Aptek.Models
 {
     partial class Pharmacy
     {
-        public List<Drug> ShowDrugs()
+        public List<Drug> DrugsList()
         {
             if (_drugList == null)
             {
@@ -32,26 +32,12 @@ namespace Aptek.Models
 
         public bool RemoveDrug(int id)
         {
-            var Drugs = _drugList.Find(x => x.Id == id);
-            if (Drugs == null)
+            var Drug = _drugList.Find(x => x.Id == id);
+            if (Drug == null)
                 return false;
 
-            _drugList.Remove(Drugs);
+            _drugList.Remove(Drug);
             return true;
-        }
-
-        public int SaleDrug(Drug drug, int drugCount)
-        {
-            if (drug.Amount == 0) 
-                return 0;
-
-            else if (drugCount != 0 && drug.Amount >= drugCount)
-            {
-                drug.DecrementCount(drugCount);
-                return 1;
-            }
-
-            return -1;
         }
 
         public Drug IsExistDrug(string drugName)

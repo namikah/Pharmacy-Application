@@ -14,21 +14,21 @@ namespace Aptek.Models
 
         public double Price { get; }
 
-        private int _amount;
+        private int _quantity;
 
-        public int Amount
-        {
-            get
-            {
-                return _amount;
-            }
-        }
-
-        private DateTime ExpirationTime;
+        public DateTime ExpirationTime { get; }
 
         public int Id { get; }
 
         private static int _idCounter;
+
+        public int Quantity
+        {
+            get
+            {
+                return _quantity;
+            }
+        }
 
         public Drug()
         {
@@ -41,7 +41,7 @@ namespace Aptek.Models
             Name = name;
             Type = type;
             Price = price;
-            _amount += count;
+            _quantity += count;
             ExpirationTime = exDate;
         }
 
@@ -50,19 +50,19 @@ namespace Aptek.Models
         //    Count += count;
         //}
 
-        public bool DecrementCount(int count)
+        public bool DecrementQuantity(int quantity)
         {
-            if (_amount >= count)
+            if (_quantity >= quantity)
             {
-                _amount -= count;
+                _quantity -= quantity;
                 return true;
             }
-                return false;
+            return false;
         }
 
         public override string ToString()
         {
-            return $"[{Id}] - {Name} - {Price}AZN - {_amount} - {ExpirationTime.ToShortDateString()}";
+            return $"[{Id}] - {Name} - {Price}AZN - {_quantity}pieces - {ExpirationTime.ToShortDateString()}";
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Aptek.Models
         CreateDrug,
         ShowAllDrugs,
         RemoveDrug,
-        RemovePharmacy,
         SaleDrug,
         Exit
     }
