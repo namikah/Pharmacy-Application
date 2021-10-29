@@ -62,7 +62,7 @@ namespace Aptek.Models
 
         public override string ToString()
         {
-            return $"[{Id}] - {Name} - {Price}AZN - {_amount} - {ExpirationTime}";
+            return $"[{Id}] - {Name} - {Price}AZN - {_amount} - {ExpirationTime.ToShortDateString()}";
         }
     }
 }

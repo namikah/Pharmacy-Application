@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\heyda\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj": {}
+    "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj": {}
   },
   "projects": {
-    "C:\\Users\\heyda\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj": {
+    "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\heyda\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj",
+        "projectUniqueName": "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj",
         "projectName": "Aptek",
-        "projectPath": "C:\\Users\\heyda\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj",
-        "packagesPath": "C:\\Users\\heyda\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\heyda\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\obj\\",
+        "projectPath": "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\Aptek.csproj",
+        "packagesPath": "C:\\Users\\namikah\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\namikah\\Desktop\\Pharmacy-Application\\PharmacyApplications\\Aptek\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\heyda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\namikah\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

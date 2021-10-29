@@ -8,17 +8,17 @@ namespace Aptek.Util
 {
     static class Helper
     {
-        public static void PrintLine(string text, ConsoleColor color)
+        public static void PrintLine(object obj, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(text);
+            Console.WriteLine(obj);
             Console.ResetColor();
         }
 
-        public static void Print(string text, ConsoleColor color)
+        public static void Print(object obj, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.Write(text);
+            Console.Write(obj);
             Console.ResetColor();
         }
 
