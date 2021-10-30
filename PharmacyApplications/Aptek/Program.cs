@@ -93,18 +93,17 @@ namespace Aptek
 
             string drugName = MenuInputDrugName();
 
-            var text = new StringBuilder("Search result:");
-
+            Helper.PrintLine("Search result:", ConsoleColor.Red);
             foreach (var item in pharmacyList)
             {
                 foreach (var drugs in item.SearchDrug(drugName))
                 {
                     if (item.SearchDrug(drugName) == null)
                         continue;
-                    text.Append($"{Environment.NewLine}{item}{Environment.NewLine}{drugs}");
+                    Helper.PrintLine(item, ConsoleColor.Yellow);
+                    Helper.PrintLine(drugs, ConsoleColor.DarkYellow);
                 }
             }
-            Console.WriteLine(text);
         }
 
         public static void MenuCreateDrug(List<Pharmacy> pharmacyList)
@@ -123,7 +122,7 @@ namespace Aptek
 
             if (selectedPharmacy.IsExistDrug(drugName))
             {
-                Console.WriteLine($"{drugName} is already exist. Do you want to add quantity? [y/n]");
+                Helper.PrintLine($"{drugName} is already exist. Do you want to add quantity? [y/n]",ConsoleColor.Red);
                 MenuAddQuantity(selectedPharmacy, selectedDrug);
                 return;
             }
@@ -322,7 +321,7 @@ namespace Aptek
             }
 
             MenuInputDrugId(pharmacyList,drugList, out Drug selectedDrug);
-            Console.WriteLine($"{selectedDrug.Name} is selected");
+            Helper.PrintLine($"{selectedDrug.Name} is selected", ConsoleColor.Yellow);
             MenuInputDrugQuantity(pharmacyList, drugList, selectedDrug, out int quantity);
 
             MenuPayMoney(selectedDrug,quantity);
@@ -389,7 +388,7 @@ namespace Aptek
                 {
                     goto InputMoney;
                 }
-                Helper.PrintLine($"You have paid more than [{selectedDrug.Price * quantity}AZN]. please take [{money - selectedDrug.Price * quantity}AZN] Thank you", ConsoleColor.Red);
+                Helper.PrintLine($"You have paid more than [{selectedDrug.Price * quantity}AZN]. please take [{money - selectedDrug.Price * quantity}AZN] Thank you", ConsoleColor.Green);
             }
             else if (money == selectedDrug.Price * quantity)
             {
@@ -397,7 +396,7 @@ namespace Aptek
                 {
                     goto InputMoney;
                 }
-                Helper.PrintLine($"Thank you, please take drugs", ConsoleColor.Red);
+                Helper.PrintLine($"Thank you, please take drugs", ConsoleColor.Green);
             }
         }
 
@@ -455,7 +454,7 @@ namespace Aptek
         public static void MainMenuDesign()
         {
             Console.Title = "PHARMACY APPLICATION";
-            Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
+            Helper.PrintLine("".PadLeft(Console.WindowWidth, '=') + Environment.NewLine, ConsoleColor.DarkMagenta);
             Helper.PrintLine(
                 $"[1] Create Pharmacy{Environment.NewLine}" +
                 $"[2] Create Drug{Environment.NewLine}" +
@@ -465,8 +464,8 @@ namespace Aptek
                 $"[6] Search drug{Environment.NewLine}" +
                 $"[7] Drug info{Environment.NewLine}" +
                 $"[8] Exit", ConsoleColor.Yellow);
-            Helper.PrintLine("".PadLeft(Console.WindowWidth, '='), ConsoleColor.DarkMagenta);
-            Helper.Print("Select Operation:", ConsoleColor.White);
+            Helper.PrintLine("".PadLeft(Console.WindowWidth, '=') + Environment.NewLine, ConsoleColor.DarkMagenta);
+            Helper.Print("Select Operation:" + Environment.NewLine, ConsoleColor.White);
         }
     }
 }
