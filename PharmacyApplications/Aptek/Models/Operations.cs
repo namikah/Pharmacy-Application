@@ -13,6 +13,8 @@ namespace Aptek.Models
         ShowAllDrugs,
         RemoveDrug,
         SaleDrug,
+        SearchDrug,
+        DrugInfo,
         Exit
     }
 }

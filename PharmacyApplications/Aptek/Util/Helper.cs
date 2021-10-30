@@ -38,11 +38,6 @@ namespace Aptek.Util
             PrintLine($"{id} is not found! try input again",ConsoleColor.Red);
         }
 
-        //public static void SorryNotQuantityMessage(Drug drug, int quantity)
-        //{
-        //    PrintLine($"Sorry, but we have only {drug.Quantity} pieces.", ConsoleColor.Red);
-        //}
-
         public static bool IsEmphtyPharmacy(List<Pharmacy> pharmacyList)
         {
             if (!(pharmacyList.Count == 0))

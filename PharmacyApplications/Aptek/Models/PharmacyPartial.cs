@@ -26,7 +26,7 @@ namespace Aptek.Models
 
         public List<Drug> SearchDrug(string name)
         {
-            var Drugs = _drugList.FindAll(x => x.Name.ToLower().Contains(name.Trim().ToLower()));
+            var Drugs = _drugList.FindAll(x => x.Name.ToLower().Contains(name.ToLower()));
             return Drugs;
         }
 
@@ -40,9 +40,33 @@ namespace Aptek.Models
             return true;
         }
 
-        public Drug IsExistDrug(string drugName)
+        public bool IsExistDrug(string drugName)
         {
-            var drug = _drugList.Find(x => x.Name.Contains(drugName.ToLower()));
+            var drug = _drugList.Find(x => x.Name.ToLower().Contains(drugName.ToLower()));
+            if (drug != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdateQuantity(int id, int quantity)
+        {
+            foreach (var item in _drugList)
+            {
+                if(item.Id == id)
+                {
+                    item.IncrementQuantity(quantity);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public Drug FindDrug(Predicate<Drug> predicate)
+        {
+            var drug = _drugList.Find(predicate);
             return drug;
         }
 

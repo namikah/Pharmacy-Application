@@ -45,10 +45,10 @@ namespace Aptek.Models
             ExpirationTime = exDate;
         }
 
-        //public void IncrementCount(int count)
-        //{
-        //    Count += count;
-        //}
+        public void IncrementQuantity(int quantity)
+        {
+            _quantity += quantity;
+        }
 
         public bool DecrementQuantity(int quantity)
         {
