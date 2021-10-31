@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aptek.Models
@@ -86,6 +87,7 @@ namespace Aptek.Models
 
         public override string ToString()
         {
+            Thread.Sleep(100);
             const string underline = "\x1B[4m";
             const string reset = "\x1B[0m";
             return $"[{Id}] {underline}{Name.ToUpper()}{reset}";

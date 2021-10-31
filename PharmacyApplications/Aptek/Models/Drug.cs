@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aptek.Models
@@ -10,13 +11,15 @@ namespace Aptek.Models
     {
         public string Name { get; set; }
 
-        public DrugType Type { get; set; }
+        public DrugType Type { get; }
 
         public double Price { get; set; }
 
         private int _quantity;
 
         public DateTime ExpirationTime { get; }
+
+        public string Info { get;}
 
         public int Id { get; }
 
@@ -36,12 +39,12 @@ namespace Aptek.Models
             Id = _idCounter;
         }
 
-        public Drug(string name, DrugType type, int count,double price, DateTime exDate) : this()
+        public Drug(string name, DrugType type, int quantity, double price, DateTime exDate) : this()
         {
             Name = name;
             Type = type;
             Price = price;
-            _quantity += count;
+            _quantity += quantity;
             ExpirationTime = exDate;
         }
 
@@ -62,6 +65,11 @@ namespace Aptek.Models
 
         public override string ToString()
         {
+            Thread.Sleep(100);
+            if (ExpirationTime < DateTime.Today)
+            {
+                return $"[{Id}] - {Name} - {Price}AZN - {_quantity}pieces - {ExpirationTime.ToShortDateString()} (Expired)";
+            }
             return $"[{Id}] - {Name} - {Price}AZN - {_quantity}pieces - {ExpirationTime.ToShortDateString()}";
         }
     }

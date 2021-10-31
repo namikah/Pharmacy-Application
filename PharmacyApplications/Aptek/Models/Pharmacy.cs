@@ -10,7 +10,7 @@ namespace Aptek.Models
     {
         public string Name { get; set; }
 
-        private List<Drug> _drugList;
+        private readonly List<Drug> _drugList;
 
         public int Id { get; }
 
