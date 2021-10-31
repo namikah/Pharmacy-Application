@@ -8,11 +8,11 @@ namespace Aptek.Models
 {
     class Drug
     {
-        public string Name { get; }
+        public string Name { get; set; }
 
-        public DrugType Type { get; }
+        public DrugType Type { get; set; }
 
-        public double Price { get; }
+        public double Price { get; set; }
 
         private int _quantity;
 

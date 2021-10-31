@@ -14,7 +14,8 @@ namespace Aptek.Models
         RemoveDrug,
         SaleDrug,
         SearchDrug,
-        DrugInfo,
+        UpdateDrug,
+        InfoDrug,
         Exit
     }
 }

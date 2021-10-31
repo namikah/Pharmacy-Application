@@ -8,7 +8,7 @@ namespace Aptek.Models
 {
     partial class Pharmacy
     {
-        public string Name { get; }
+        public string Name { get; set; }
 
         private List<Drug> _drugList;
 

@@ -18,7 +18,7 @@ namespace Aptek.Models
 
             return _drugList;
         }
-        
+
         public void AddDrug(Drug drug)
         {
             _drugList.Add(drug);
@@ -50,11 +50,11 @@ namespace Aptek.Models
             return false;
         }
 
-        public bool UpdateQuantity(int id, int quantity)
+        public bool AddQuantity(int id, int quantity)
         {
             foreach (var item in _drugList)
             {
-                if(item.Id == id)
+                if (item.Id == id)
                 {
                     item.IncrementQuantity(quantity);
                     return true;
@@ -68,6 +68,20 @@ namespace Aptek.Models
         {
             var drug = _drugList.Find(predicate);
             return drug;
+        }
+
+        public bool Update(Drug drug, string name = null, double price = 0)
+        {
+            foreach (var item in _drugList)
+            {
+                if(item == drug)
+                {
+                    if (name != null) item.Name = name;
+                    if (price != 0) item.Price = price;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override string ToString()
