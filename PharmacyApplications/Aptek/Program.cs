@@ -9,19 +9,262 @@ namespace Aptek
 {
     class Program
     {
-        static void Main(string[] args)
+        public static string CurrentUserName;
+        public static string CurrentPassword;
+
+        static void Main()
         {
+            List<User> userList = new List<User>();
+
+            while (CurrentUserName == null && CurrentPassword == null)
+            {
+                MenuLoginPanel(userList);
+            }
+
             List<Pharmacy> pharmacyList = new();
 
             CustomAdd(pharmacyList);
 
-            MainMenu(pharmacyList);
+            MainMenu(pharmacyList,userList);
         }
 
-        public static void MainMenu(List<Pharmacy> pharmacyList)
+        public static bool CheckStatus(List<User> userList)
+        {
+            var IsAdmin = userList.FindAll(x => x.UserName == CurrentUserName && x.Password==CurrentPassword && x.Status == "Admin");
+            if(IsAdmin.Count != 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static void MenuAdminPanel(List<User> userList)
+        {
+        MenuAdminPanel:
+            ShowAllUSer(userList);
+            Helper.PrintSlowMotion(10, $"{Environment.NewLine}" +
+                $"1. Add User{Environment.NewLine}" +
+                $"2. Change user status{Environment.NewLine}" +
+                $"3. Remove user{Environment.NewLine}" +
+                $"4. Show all user{Environment.NewLine}" +
+                $"5. Back to Main menu", ConsoleColor.Yellow);
+
+            Helper.Print("Please select:", ConsoleColor.White);
+            if (!int.TryParse(Console.ReadLine(), out int result))
+            {
+                Helper.IncorrectMessage();
+                Console.Clear();
+                return;
+            }
+
+            if (result == 1)
+            {
+                Helper.PrintSlowMotion(10, "User name (Ex: User or 123):", ConsoleColor.Yellow);
+                string userName = Console.ReadLine();
+
+            inputPassword:
+                Helper.PrintSlowMotion(10, "Password (ex: User123):", ConsoleColor.Yellow);
+                string password = Console.ReadLine();
+
+                Helper.PrintSlowMotion(10, "re-Password:", ConsoleColor.Yellow);
+                string rePassword = Console.ReadLine();
+
+                if (password != rePassword)
+                {
+                    Helper.PrintSlowMotion(10, "Password is not same", ConsoleColor.Red);
+                    goto inputPassword;
+                }
+
+                User user = new User(userName, password, "User");
+                userList.Add(user);
+
+                Helper.PrintSlowMotion(10, $"User [{userName}] successfully added as [User]", ConsoleColor.Green);
+                goto MenuAdminPanel;
+            }
+
+            else if (result == 2)
+            {
+                Console.Write("Select user:");
+                if (!int.TryParse(Console.ReadLine(), out int id))
+                {
+                    Helper.IncorrectMessage();
+                    Console.Clear();
+                    goto MenuAdminPanel;
+                }
+
+                var User = userList.Find(x => x.Id == id);
+                if (User.Status == "User")
+                {
+                    User.Status = "Admin";
+                    Helper.PrintSlowMotion(10, $"status successfully changed to [Admin] for {User.UserName} ", ConsoleColor.Green);
+                }
+                else
+                {
+                    User.Status = "User";
+                    Helper.PrintSlowMotion(10, $"status successfully changed to [User] for {User.UserName} ", ConsoleColor.Green);
+                }
+                Console.Clear();
+                goto MenuAdminPanel;
+            }
+            else if (result == 3)
+            {
+                Console.WriteLine("Select user:"); 
+                if (!int.TryParse(Console.ReadLine(), out int id))
+                {
+                    Helper.IncorrectMessage();
+                    Console.Clear();
+                    goto MenuAdminPanel;
+                }
+
+                if (!RemoveUser(userList, id))
+                {
+                    Helper.PrintSlowMotion(10, "User not removed", ConsoleColor.Red);
+                    goto MenuAdminPanel;
+                }
+                Helper.PrintSlowMotion(10, "User successfully removed", ConsoleColor.Green);
+                Main();
+            }
+            else if(result == 4)
+            {
+                goto MenuAdminPanel;
+            }
+
+            else if (result == 5)
+            {
+                Console.Clear();
+                return;
+            }
+        }
+
+        public static bool RemoveUser(List<User> userList, int id)
+        {
+            var user = userList.Find(x => x.Id == id);
+            if (user == null)
+                return false;
+
+            userList.Remove(user);
+            return true;
+        }
+
+        public static void ShowAllUSer(List<User> userList)
+        {
+            if (userList.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var u in userList)
+            {
+                Helper.PrintLine("".PadLeft(Console.WindowWidth, '-'), ConsoleColor.DarkMagenta);
+                Helper.PrintLine(u, ConsoleColor.Yellow);
+            }
+        }
+
+        public static void MenuLoginPanel(List<User> userList)
+        {
+        LoginMenu:
+            Helper.PrintSlowMotion(10, $"1. Login{Environment.NewLine}2. Registration",ConsoleColor.Yellow);
+            Helper.Print("Please select:",ConsoleColor.White);
+            if (!int.TryParse(Console.ReadLine(), out int result))
+            {
+                Helper.IncorrectMessage();
+                goto LoginMenu;
+            }
+            if(result == 1)
+            {
+                MenuLogin(userList);
+            }
+            else if(result == 2)
+            {
+                MenuRegistration(userList);
+            }
+
+            if (CurrentUserName == null || CurrentPassword==null)
+                goto LoginMenu;
+        }
+
+        public static void MenuLogin(List<User> userList)
+        {
+            if (userList.Count == 0)
+            {
+               Helper.PrintSlowMotion(10, "No registration. Please register:", ConsoleColor.Red);
+                MenuRegistration(userList);
+            }
+
+            InputUserName:
+            Helper.PrintSlowMotion(10, "User name:", ConsoleColor.Yellow);
+            string userName = Console.ReadLine();
+
+            Helper.PrintSlowMotion(10,"Password:", ConsoleColor.Yellow);
+            string password = Console.ReadLine();
+
+            var isUser = userList.FindAll(x=>x.UserName==userName && x.Password ==password);
+
+            if(isUser.Count == 0)
+            {
+                Helper.PrintSlowMotion(10, "Incorrect username or password", ConsoleColor.Red);
+                goto InputUserName;
+            }
+            foreach (var item in userList)
+            {
+                if (item.UserName == userName && item.Password == password)
+                {
+                   Helper.PrintSlowMotion(10,"Welcome, " + userName, ConsoleColor.Green);
+                    CurrentUserName = userName;
+                    CurrentPassword = password;
+                }
+            }
+            Console.Clear();
+        }
+
+        public static void MenuRegistration(List<User> userList)
+        {
+        InputUserName:
+            Helper.PrintSlowMotion(10, "User name (Ex: User or 123):", ConsoleColor.Yellow);
+            string userName = Console.ReadLine();
+
+        inputPassword:
+            Helper.PrintSlowMotion(10,"Password (ex: User123):", ConsoleColor.Yellow);
+            string password = Console.ReadLine();
+
+            Helper.PrintSlowMotion(10, "re-Password:", ConsoleColor.Yellow);
+            string rePassword = Console.ReadLine();
+
+            if (password != rePassword)
+            {
+                Helper.PrintSlowMotion(10, "Password is not same", ConsoleColor.Red);
+                goto inputPassword;
+            }
+
+            string status;
+            if (userList.Count == 0)
+            {
+                status = "Admin";
+            }
+            else
+            {
+                status = "User";
+            }
+            User user = new User(userName, password, status);
+
+            if (user._password == null || user.UserName == null)
+            {
+                Helper.PrintSlowMotion(10, "Incorrect username or password", ConsoleColor.Red);
+                goto InputUserName;
+            }
+
+            userList.Add(user);
+            CurrentUserName = userName;
+            CurrentPassword = password;
+            Helper.PrintSlowMotion(10, "registration succesfully", ConsoleColor.Green);
+            Helper.PrintSlowMotion(10, $"Please login {CurrentUserName}", ConsoleColor.Yellow);
+        }
+
+        public static void MainMenu(List<Pharmacy> pharmacyList, List<User> userList)
         {
             while (true)
             {
+                Thread.Sleep(1000);
                 MainMenuDesign();
                 bool isInt = int.TryParse(Console.ReadLine(), out int menu);
                 int operationCount = Enum.GetValues(typeof(Operations)).Length;
@@ -70,10 +313,26 @@ namespace Aptek
                         case Operations.InfoDrug:
                             break;
 
+                        case Operations.AdminPanel:
+                            Console.Clear();
+                            if (CheckStatus(userList))
+                            {
+                                MenuAdminPanel(userList);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Access denied");
+                            }
+                            break;
+
+                        case Operations.LogOut:
+                            Console.Clear();
+                            LogOut(userList);
+                            break;
+
                         case Operations.Exit:
                             Console.Clear();
                             break;
-                       
                         default:
                             break;
                     }
@@ -83,6 +342,13 @@ namespace Aptek
                     Helper.IncorrectMessage();
                 }
             }
+        }
+
+        public static void LogOut(List<User> userList)
+        {
+            CurrentUserName = null;
+            CurrentPassword = null;
+            MenuLoginPanel(userList);
         }
 
         public static void InfoDrug(List<Drug> drugList, string name)
@@ -150,14 +416,14 @@ namespace Aptek
             {
                 var drugName = MenuInputDrugName();
                 selectedPharmacy.Update(selectedDrug, drugName);
-                Helper.PrintSlowMotion(15, $"Old drug name [{oldDrugName}] successfully changed to new [{drugName}]",ConsoleColor.Green);
+                Helper.PrintSlowMotion(10, $"Old drug name [{oldDrugName}] successfully changed to new [{drugName}]",ConsoleColor.Green);
                 return;
             }
             else if (selectedUpdateBy == 2)
             {
                 var drugPrice = MenuInputDrugPrice();
                 selectedPharmacy.Update(selectedDrug, null, drugPrice);
-                Helper.PrintSlowMotion(15, $"Old drug price [{oldDrugPrice}] successfully changed to new [{drugPrice}]", ConsoleColor.Green);
+                Helper.PrintSlowMotion(10, $"Old drug price [{oldDrugPrice}] successfully changed to new [{drugPrice}]", ConsoleColor.Green);
             }
         }
 
@@ -206,7 +472,7 @@ namespace Aptek
             var date = MenuInputDateTime();
 
             selectedPharmacy.AddDrug(new Drug(drugName, drugType, drugQuantity, price, date));
-            Helper.PrintSlowMotion(15, $"[{drugName}] is successfully added to [{selectedPharmacy.Name}]", ConsoleColor.Green);
+            Helper.PrintSlowMotion(10, $"[{drugName}] is successfully added to [{selectedPharmacy.Name}]", ConsoleColor.Green);
         }
 
         public static string MenuInputDrugName()
@@ -287,7 +553,7 @@ namespace Aptek
 
             pharmacyList.Add(new Pharmacy(name));
 
-            Helper.PrintSlowMotion(15, $"[{name}] Created successfully", ConsoleColor.Green);
+            Helper.PrintSlowMotion(10, $"[{name}] Created successfully", ConsoleColor.Green);
         }
 
         public static void AddQuantity(Pharmacy selectedPharmacy, Drug selectedDrug)
@@ -307,7 +573,7 @@ namespace Aptek
                     goto InputDrugQuantity;
                 }
                 selectedDrug.IncrementQuantity(Quantity);
-                Helper.PrintSlowMotion(15, $"{Quantity} {selectedDrug.Name} successfully added to {selectedPharmacy.Name}", ConsoleColor.Green);
+                Helper.PrintSlowMotion(10, $"{Quantity} {selectedDrug.Name} successfully added to {selectedPharmacy.Name}", ConsoleColor.Green);
             }else
             {
                 return;
@@ -367,7 +633,7 @@ namespace Aptek
                 goto inputDrugId;
             }
 
-            Helper.PrintSlowMotion(15, $"[{RemovedDrugName}] is successfully removed from [{selectedPharmacy.Name}]", ConsoleColor.Green);
+            Helper.PrintSlowMotion(10, $"[{RemovedDrugName}] is successfully removed from [{selectedPharmacy.Name}]", ConsoleColor.Green);
         }
 
         public static void SaleDrug(List<Pharmacy> pharmacyList)
@@ -463,7 +729,7 @@ namespace Aptek
                 {
                     goto InputMoney;
                 }
-                Helper.PrintSlowMotion(15, $"You have paid more than [{selectedDrug.Price * quantity}AZN]. please take [{money - selectedDrug.Price * quantity}AZN] Thank you", ConsoleColor.Green);
+                Helper.PrintSlowMotion(10, $"You have paid more than [{selectedDrug.Price * quantity}AZN]. please take [{money - selectedDrug.Price * quantity}AZN] Thank you", ConsoleColor.Green);
 
             }
             else if (money == selectedDrug.Price * quantity)
@@ -472,7 +738,7 @@ namespace Aptek
                 {
                     goto InputMoney;
                 }
-                Helper.PrintSlowMotion(15, $"Thank you, please take drugs", ConsoleColor.Green);
+                Helper.PrintSlowMotion(10, $"Thank you, please take drugs", ConsoleColor.Green);
             }
         }
 
@@ -556,7 +822,7 @@ namespace Aptek
         public static void MainMenuDesign()
         {
             Console.Title = "PHARMACY APPLICATION";
-            Helper.PrintLine("".PadLeft(Console.WindowWidth, '=') + Environment.NewLine, ConsoleColor.DarkMagenta);
+            Helper.PrintSlowMotion(5,"".PadLeft(Console.WindowWidth, '=') + Environment.NewLine, ConsoleColor.DarkMagenta);
             Helper.PrintSlowMotion(1,
                 $"[1] Create Pharmacy{Environment.NewLine}" +
                 $"[2] Create Drug{Environment.NewLine}" +
@@ -566,7 +832,9 @@ namespace Aptek
                 $"[6] Search drug{Environment.NewLine}" +
                 $"[7] Update Drug{Environment.NewLine}" +
                 $"[8] Drug info{Environment.NewLine}" +
-                $"[9] Exit", ConsoleColor.Yellow);
+                $"[9] Admin panel{Environment.NewLine}" +
+                $"[10] Log out{Environment.NewLine}" +
+                $"[11] Exit", ConsoleColor.Yellow);
             Helper.PrintLine("".PadLeft(Console.WindowWidth, '=') + Environment.NewLine, ConsoleColor.DarkMagenta);
             Helper.PrintLine("Select Operation:" + Environment.NewLine, ConsoleColor.White);
         }

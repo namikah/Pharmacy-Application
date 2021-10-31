@@ -16,6 +16,8 @@ namespace Aptek.Models
         SearchDrug,
         UpdateDrug,
         InfoDrug,
+        AdminPanel,
+        LogOut,
         Exit
     }
 }

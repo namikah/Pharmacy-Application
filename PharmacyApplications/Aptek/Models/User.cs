@@ -8,15 +8,17 @@ namespace Aptek.Models
 {
     class User
     {
-        private string _login;
+        private string _userName;
 
         public string _password;
 
-        public string Login
+        private string _status;
+
+        public string UserName
         {
             get
             {
-                return _login;
+                return _userName;
             }
             set
             {
@@ -27,10 +29,9 @@ namespace Aptek.Models
                         return;
                     }
                 }
-                _login = value;
+                _userName = value;
             }
         }
-
 
         public string Password
         {
@@ -40,29 +41,68 @@ namespace Aptek.Models
             }
             set
             {
-                int isUpper = 0, isLower = 0;
-                
+                int isUpper = 0, isLower = 0, isDigit = 0, isLetter = 0;
+
                 foreach (char item in value)
                 {
-                    if (!char.IsLetter(item) && !char.IsDigit(item))
+                    if (char.IsDigit(item))
                     {
-                        return;
+                        isDigit++;
                     }
-                    if (char.IsUpper(item))
+                    else if (char.IsLetter(item))
                     {
-                        isUpper++;
-                    }
-                    if (char.IsLower(item))
-                    {
-                        isLower++;
+                        isLetter++;
+
+                        if (char.IsUpper(item))
+                        {
+                            isUpper++;
+                        }
+                        else if (char.IsLower(item))
+                        {
+                            isLower++;
+                        }
                     }
                 }
-                if (isUpper > 0 && isLower > 0)
+                if (isUpper > 0 && isLower > 0 && isDigit > 0 && isLetter > 0)
                 {
-                    _login = value;
+                    _password = value;
                 }
                 else return;
             }
+        }
+
+        public int Id { get; }
+
+        private static int _idCounter;
+
+        public string Status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                if(value == "Admin" || value == "User")
+                {
+                    _status = value;
+                }
+                return;
+            }
+        }
+
+        public User(string userName, string passWord, string status)
+        {
+            UserName = userName;
+            Password = passWord;
+            Status = status;
+            _idCounter++;
+            Id = _idCounter;
+        }
+
+        public override string ToString()
+        {
+            return $"[{_userName}] - [{_password}] - [{_status}]";
         }
     }
 }

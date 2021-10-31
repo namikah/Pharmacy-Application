@@ -36,7 +36,7 @@ namespace Aptek.Util
                 Console.Write(text[i]);
             }
             Console.ResetColor();
-            Console.WriteLine(Environment.NewLine);
+            Console.Write(Environment.NewLine);
         }
 
         public static void Print(object obj, ConsoleColor color)
