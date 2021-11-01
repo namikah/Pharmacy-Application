@@ -92,6 +92,12 @@ namespace Aptek
 
             else if (result == 2)
             {
+                if(userList.Count == 1)
+                {
+                    Helper.PrintSlowMotion(10, $"Sorry, you can not change user. Becouse only have one user as admin", ConsoleColor.Red);
+                    goto MenuAdminPanel;
+                }
+
                 Console.Write("Select user:");
                 if (!int.TryParse(Console.ReadLine(), out int id))
                 {
@@ -108,6 +114,12 @@ namespace Aptek
                 }
                 else
                 {
+                    var checkUserList = userList.FindAll(x => x.Status == "Admin");
+                    if(checkUserList.Count == 1)
+                    {
+                        Helper.PrintSlowMotion(10, $"Sorry, you can not change user. Becouse only have one user as admin", ConsoleColor.Red); 
+                        goto MenuAdminPanel;
+                    }
                     User.Status = "User";
                     Helper.PrintSlowMotion(10, $"status successfully changed to [User] for {User.UserName} ", ConsoleColor.Green);
                 }
