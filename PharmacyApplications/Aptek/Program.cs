@@ -62,6 +62,14 @@ namespace Aptek
                 Helper.PrintSlowMotion(10, "User name (Ex: User or 123):", ConsoleColor.Yellow);
                 string userName = Console.ReadLine();
 
+                var drug = userList.Find(x => x.UserName == userName);
+
+                if (drug != null)
+                {
+                    Helper.PrintSlowMotion(10, "Username already exist.", ConsoleColor.Red);
+                    goto MenuAdminPanel;
+                }
+
             inputPassword:
                 Helper.PrintSlowMotion(10, "Password (ex: User123):", ConsoleColor.Yellow);
                 string password = Console.ReadLine();
@@ -78,7 +86,7 @@ namespace Aptek
                 User user = new User(userName, password, "User");
                 userList.Add(user);
 
-                Helper.PrintSlowMotion(10, $"User [{userName}] successfully added as [User]", ConsoleColor.Green);
+                Helper.PrintSlowMotion(10, $"User [{userName}] successfully added", ConsoleColor.Green);
                 goto MenuAdminPanel;
             }
 
@@ -108,7 +116,7 @@ namespace Aptek
             }
             else if (result == 3)
             {
-                Console.WriteLine("Select user:"); 
+                Console.WriteLine("Select user:");
                 if (!int.TryParse(Console.ReadLine(), out int id))
                 {
                     Helper.IncorrectMessage();
@@ -122,7 +130,15 @@ namespace Aptek
                     goto MenuAdminPanel;
                 }
                 Helper.PrintSlowMotion(10, "User successfully removed", ConsoleColor.Green);
-                Main();
+                if (userList.Count == 0)
+                {
+                    CurrentUserName = null;
+                    CurrentPassword = null; 
+                    Thread.Sleep(1000);
+                    Console.Clear();
+                    Main();
+                }
+                goto MenuAdminPanel;
             }
             else if(result == 4)
             {
@@ -223,6 +239,14 @@ namespace Aptek
             Helper.PrintSlowMotion(10, "User name (Ex: User or 123):", ConsoleColor.Yellow);
             string userName = Console.ReadLine();
 
+            var drug = userList.Find(x => x.UserName == userName);
+
+            if (drug != null)
+            {
+                Helper.PrintSlowMotion(10, "Username already exist.",ConsoleColor.Red);
+                goto InputUserName;
+            }
+
         inputPassword:
             Helper.PrintSlowMotion(10,"Password (ex: User123):", ConsoleColor.Yellow);
             string password = Console.ReadLine();
@@ -264,7 +288,7 @@ namespace Aptek
         {
             while (true)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 MainMenuDesign();
                 bool isInt = int.TryParse(Console.ReadLine(), out int menu);
                 int operationCount = Enum.GetValues(typeof(Operations)).Length;
@@ -311,6 +335,8 @@ namespace Aptek
                             break;
 
                         case Operations.InfoDrug:
+                            Console.Clear();
+                            InfoDrug(pharmacyList);
                             break;
 
                         case Operations.AdminPanel:
@@ -351,9 +377,32 @@ namespace Aptek
             MenuLoginPanel(userList);
         }
 
-        public static void InfoDrug(List<Drug> drugList, string name)
+        public static void InfoDrug(List<Pharmacy> pharmacyList)
         {
+            Helper.PrintSlowMotion(10, "Please enter drug name:",ConsoleColor.Yellow);
+            string drugName = Console.ReadLine();
 
+            Drug drug = null;
+            foreach (var p in pharmacyList)
+            {
+                foreach (var d in p.DrugsList())
+                {
+                    if (d.Name.ToLower().Contains(drugName.ToLower()))
+                    {
+                        drug = d;
+                        break;
+                    }
+                }
+            }
+
+            string infoPrice;
+            if (drug.Price > 50)
+            {
+                infoPrice = "Cheap";
+            }
+            infoPrice = "expensive";
+
+           Helper.PrintSlowMotion(10,$"{drug.Name} - is used for {drug.Type}. We have {drug.Quantity} pieces. {drug.Name} is also {infoPrice} drug. But we sell that only {drug.Price}AZN. Date expired at {drug.ExpirationTime.ToShortDateString()}",ConsoleColor.Green);
         }
 
         public static void SearchDrug(List<Pharmacy> pharmacyList)
@@ -851,14 +900,14 @@ namespace Aptek
             pharmacyList.Add(p3);
             pharmacyList.Add(p4);
 
-            p1.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today.AddDays(-5)));
-            p1.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today));
-            p2.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today));
-            p2.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today.AddDays(-5)));
-            p3.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today));
-            p3.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today));
-            p4.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today.AddDays(-5)));
-            p4.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 12, DateTime.Today));
+            p1.AddDrug(new Drug("Cardio-Maqnil", new DrugType("cardiovascular"), 5, 20, DateTime.Today.AddDays(-5)));
+            p1.AddDrug(new Drug("Evinol", new DrugType("Vitamin"), 10, 12, DateTime.Today));
+            p2.AddDrug(new Drug("Ekvator", new DrugType("cardiovascular"), 7, 35, DateTime.Today));
+            p2.AddDrug(new Drug("MultiVita", new DrugType("Vitamin"), 12, 25, DateTime.Today.AddDays(-5)));
+            p3.AddDrug(new Drug("Norkalut", new DrugType("Ginecology"), 8, 50, DateTime.Today));
+            p3.AddDrug(new Drug("Novanfron", new DrugType("kidney disease"), 6, 16, DateTime.Today));
+            p4.AddDrug(new Drug("cistilen", new DrugType("kidney disease"), 45, 12.50, DateTime.Today.AddDays(-5)));
+            p4.AddDrug(new Drug("Aspirin", new DrugType("Vitamin"), 5, 8.50, DateTime.Today));
         }
 
         public static bool IsEmphtyPharmacy(List<Pharmacy> pharmacyList)

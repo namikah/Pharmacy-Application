@@ -19,8 +19,6 @@ namespace Aptek.Models
 
         public DateTime ExpirationTime { get; }
 
-        public string Info { get;}
-
         public int Id { get; }
 
         private static int _idCounter;

@@ -102,7 +102,7 @@ namespace Aptek.Models
 
         public override string ToString()
         {
-            return $"[{_userName}] - [{_password}] - [{_status}]";
+            return $"[{Id}] - [{_userName}] - [{_password}] - [{_status}]";
         }
     }
 }
