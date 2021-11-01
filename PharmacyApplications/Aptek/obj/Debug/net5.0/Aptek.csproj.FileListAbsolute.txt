@@ -45,3 +45,4 @@ C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\ne
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\ref\Aptek.dll
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.pdb
 C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.genruntimeconfig.cache
+C:\Users\Admin\OneDrive\Desktop\Pharmacy\PharmacyApplications\Aptek\obj\Debug\net5.0\Aptek.csproj.AssemblyReference.cache

@@ -23,7 +23,7 @@ namespace Aptek
 
             List<Pharmacy> pharmacyList = new();
 
-            CustomAdd(pharmacyList);
+            //CustomAdd(pharmacyList);
 
             MainMenu(pharmacyList,userList);
         }
@@ -238,10 +238,12 @@ namespace Aptek
                 if (item.UserName == userName && item.Password == password)
                 {
                    Helper.PrintSlowMotion(10,"Welcome, " + userName, ConsoleColor.Green);
+                  
                     CurrentUserName = userName;
-                    CurrentPassword = password;
+                    CurrentPassword = password; 
                 }
             }
+            Thread.Sleep(1000);
             Console.Clear();
         }
 
