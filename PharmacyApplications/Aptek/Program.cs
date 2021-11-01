@@ -23,7 +23,7 @@ namespace Aptek
 
             List<Pharmacy> pharmacyList = new();
 
-            //CustomAdd(pharmacyList);
+            CustomAdd(pharmacyList);
 
             MainMenu(pharmacyList,userList);
         }
