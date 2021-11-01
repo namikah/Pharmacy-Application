@@ -395,14 +395,7 @@ namespace Aptek
                 }
             }
 
-            string infoPrice;
-            if (drug.Price > 50)
-            {
-                infoPrice = "Cheap";
-            }
-            infoPrice = "expensive";
-
-           Helper.PrintSlowMotion(10,$"{drug.Name} - is used for {drug.Type}. We have {drug.Quantity} pieces. {drug.Name} is also {infoPrice} drug. But we sell that only {drug.Price}AZN. Date expired at {drug.ExpirationTime.ToShortDateString()}",ConsoleColor.Green);
+           Helper.PrintSlowMotion(10,$"{drug.Name} - is used for {drug.Type}. We have {drug.Quantity} pieces. {drug.Name} is offered for you very expensive. We sell that only {drug.Price}AZN. Date expired at {drug.ExpirationTime.ToShortDateString()}",ConsoleColor.Green);
         }
 
         public static void SearchDrug(List<Pharmacy> pharmacyList)
